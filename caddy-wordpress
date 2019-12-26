@@ -1,0 +1,57 @@
+ curl https://getcaddy.com | bash -s personal
+ or
+ wget -qO- https://getcaddy.com | bash -s personal
+ which caddy // 显示 /usr/local/bin/caddy
+ 
+ vi /home/Caddyfile
+ 找到指定用户帐户的片段。
+
+; Unix user/group of processes
+; Note: The user is mandatory. If the group is not set, the default user's group
+;       will be used.
+; RPM: apache Choosed to be able to access some dir as httpd
+user = apache
+; RPM: Keep a group allowed to write in log dir.
+group = apache
+将两个值更改为caddy，如下所示：
+
+; Unix user/group of processes
+; Note: The user is mandatory. If the group is not set, the default user's group
+;       will be used.
+; RPM: apache Choosed to be able to access some dir as httpd
+user = caddy
+; RPM: Keep a group allowed to write in log dir.
+group = caddy
+
+安装 MySQL&PHP：
+wget https://repo.mysql.com//mysql-apt-config_0.8.13-1_all.deb
+dpkg -i mysql-apt-config_0.8.13-1_all.deb 
+rm -rf mysql-apt-config_0.8.13-1_all.deb
+apt update && apt upgrade -y
+apt install mysql-server -y
+
+創建數據庫、用戶與授權
+mysql -uroot -pmypassword
+登錄MySQL之後，使用如下命令：
+>create database xuezhikong_com;
+>use xuezhikong_com;
+>create user 'admin'@'%' identified by '123456';
+>grant all privileges on xuezhikong_com.* to 'admin'@'%';
+>flush privileges;
+>exit;
+退出數據庫後，重啓數據庫
+service mysql restart
+7.0 Version
+sudo apt-get install php7.0-fpm php7.0-mysql php7.0-curl php7.0-gd php7.0-mbstring php7.0-mcrypt php7.0-xml php7.0-xmlrpc
+
+5.6Version
+sudo yum install php php-fpm php-mysql php-curl php-gd php-mbstring php-mcrypt php-xml php-xmlrpc
+
+php -v  //查看PHP版本
+
+安裝WordPress：
+mkdir -p /home/wwwroot/domain.com //創建放置源程序的目錄
+cd /home/wwwroot/domain.com/ && wget https://wordpress.org/latest.zip //進入目錄並下載WordPress
+apt install unzip -y && unzip latest.zip
+mv wordpress/* .
+rm -rf latest.zip wordpress  //此時，WordPress內的文件都在domain.com目錄下
